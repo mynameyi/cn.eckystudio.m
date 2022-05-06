@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:width="41dp" android:height="41dp">
+        <layer-list>
+            <item android:left="10dp" android:top="19.5dp" android:height="2dp" android:width="12.5dp">
+                <rotate
+                    android:fromDegrees="315"
+                    android:pivotX="8%"
+                    android:pivotY="50%"
+                    android:toDegrees="0">
+
+                    <shape>
+                        <solid android:color="#ffffff" />
+                        <corners android:topRightRadius="5dp" android:bottomRightRadius="5dp" />
+                        <!--<size-->
+                            <!--android:width="20dp"-->
+                            <!--android:height="2dp" />-->
+                        <!--<stroke-->
+                            <!--android:width="1dp"-->
+                            <!--android:color="#ffffffff" />-->
+                    </shape>
+                </rotate>
+            </item>
+
+            <item android:left="11dp" android:top="19.5dp" android:height="2dp" android:width="19dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="#ffffff" />
+                    <corners android:topRightRadius="5dp" android:bottomRightRadius="5dp" />
+                </shape>
+            </item>
+
+            <item android:left="10dp" android:top="19.5dp" android:height="2dp" android:width="12.5dp">
+                <rotate
+                    android:fromDegrees="45"
+                    android:pivotX="8%"
+                    android:pivotY="50%"
+                    android:toDegrees="0">
+                    <!-- pivotX = height/2/width  =  3 / 2 / 20dp-->
+                    <shape>
+                        <solid android:color="#ffffff" />
+                        <corners android:topRightRadius="5dp" android:bottomRightRadius="5dp" />
+                        <!--<size-->
+                            <!--android:width="20dp"-->
+                            <!--android:height="2dp" />-->
+                        <!--<stroke-->
+                            <!--android:width="1dp"-->
+                            <!--android:color="#ffffffff" />-->
+                    </shape>
+                </rotate>
+            </item>
+        </layer-list>
+    </item>
+</layer-list>

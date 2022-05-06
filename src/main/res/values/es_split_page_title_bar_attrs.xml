@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2011 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <declare-styleable name="SplitPageTitleBar">    
+        <attr name="indicator" format="reference" />
+        <attr name="bindTo" format="reference"/>
+            
+<!--         <attr name="background" format="reference|color" />
+        normal mode attrs
+        <attr name="leftImage" format="reference" />
+        <attr name="leftText" format="reference|string" />
+        <attr name="leftButton" format="reference|string" />
+        <attr name="leftButtonBackground" format="reference" />   
+             
+        <attr name="rightImage" format="reference" />
+        <attr name="rightText" format="reference|string" />        
+        <attr name="rightButton" format="reference|string" />
+        <attr name="rightButtonBackground" format="reference" /> 
+        
+        edit mode attrs
+        <attr name="leftImageWhenEdit" format="reference" />
+        <attr name="leftTextWhenEdit" format="reference|string" />
+        <attr name="leftButtonWhenEdit" format="reference|string" />
+        <attr name="leftButtonBackgroundWhenEdit" format="reference" />   
+             
+        <attr name="rightImageWhenEdit" format="reference" />
+        <attr name="rightTextWhenEdit" format="reference|string" />        
+        <attr name="rightButtonWhenEdit" format="reference|string" />
+        <attr name="rightButtonBackgroundWhenEdit" format="reference" /> 
+                
+        when set this attribute,the leftImage will be invalid        
+        <attr name="externalNormalView" format="reference" /> 
+        <attr name="externalEditView" format="reference" />    -->      
+    </declare-styleable>
+</resources>

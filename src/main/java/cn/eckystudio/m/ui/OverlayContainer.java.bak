@@ -1,0 +1,176 @@
+package cn.eckystudio.m.ui;
+
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Rect;
+import android.util.AttributeSet;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+
+import cn.eckystudio.m.R;
+
+public class OverlayContainer extends FrameLayout {
+    ViewGroup mFakeLeftContainer;
+    View mLeftView;
+
+    AnimatorSet mAnimatorSetShow;
+    AnimatorSet mAnimatorSetHide;
+
+    public OverlayContainer(Context context) {
+        this(context,null);
+    }
+
+    public OverlayContainer(Context context, AttributeSet attrs) {
+        super(context, attrs);
+
+        if(attrs != null) {
+            Resources.Theme theme = context.getTheme();
+
+            int base_len = R.styleable.OverlayContainer.length;
+            int[] attr_arr = new int[base_len];
+
+            for (int i = 0; i < base_len; i++) {
+                attr_arr[i] = R.styleable.OverlayContainer[i];
+            }
+
+            TypedArray a = theme.obtainStyledAttributes(attrs, attr_arr, 0, 0);
+
+            int mainId = a.getResourceId(R.styleable.OverlayContainer_mainLayout, 0);
+            if(mainId != 0)
+                this.addView(View.inflate(context,mainId,null));
+
+            int leftId = a.getResourceId(R.styleable.OverlayContainer_leftLayout, 0);
+            if (leftId != 0)
+                mLeftView = View.inflate(context, leftId, null);
+
+            a.recycle();
+        }
+
+        //init view
+
+//        mFakeLeftContainer.setBackgroundColor(0x80333333);
+    }
+
+    private void makeAnimator(int leftViewWidth){
+        mLeftView.setX(leftViewWidth);//设置当前位置
+        mFakeLeftContainer.bringToFront();
+
+        mAnimatorSetShow= new AnimatorSet();
+        Animator animatorLeftView = ObjectAnimator.ofFloat(mLeftView,"x",-leftViewWidth,0);
+//        Animator animatorFakeView = ObjectAnimator.ofFloat(mFakeLeftContainer,"alpha",0,0.5f);
+        Animator animatorFakeView = ObjectAnimator.ofArgb(mFakeLeftContainer,"backgroundColor",0xff000000,0x80000000);
+
+        mAnimatorSetShow.playTogether(animatorLeftView,animatorFakeView);
+
+        mAnimatorSetHide = new AnimatorSet();
+        animatorLeftView = ObjectAnimator.ofFloat(mLeftView,"x",0,-leftViewWidth);
+//        animatorFakeView = ObjectAnimator.ofFloat(mFakeLeftContainer,"alpha",mFakeLeftContainer.getAlpha(),0);
+        animatorFakeView = ObjectAnimator.ofArgb(mFakeLeftContainer,"backgroundColor",0x80000000,0xff000000);
+        mAnimatorSetHide.playTogether(animatorLeftView,animatorFakeView);
+
+        mAnimatorSetHide.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mFakeLeftContainer.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        mAnimatorSetShow.start();
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        //设置为全屏
+        int height = Display.getInstance(getContext()).getScreenHeight();
+        int width = Display.getInstance(getContext()).getScreenWidth();
+
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height,MeasureSpec.AT_MOST);
+        widthMeasureSpec = MeasureSpec.makeMeasureSpec(width,MeasureSpec.AT_MOST);
+
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+    }
+
+    public void showLeftContainer(){
+//        mAnimatorSetShow.start();
+        if(mFakeLeftContainer == null){
+            mFakeLeftContainer = new FrameLayout(getContext());
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(Display.getInstance(getContext()).getScreenWidth(),Display.getInstance(getContext()).getScreenHeight());
+
+            addView(mFakeLeftContainer,params);
+            mFakeLeftContainer.addView(mLeftView);
+            mFakeLeftContainer.setBackgroundColor(0xff000000);
+            mFakeLeftContainer.setClickable(true);
+            mFakeLeftContainer.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    hideLeftContainer();
+                }
+            });
+            //test measure
+//            System.out.println("?liangyi=> mLeftView size is " + mLeftView.getMeasuredWidth());
+//            int height = Display.getInstance(getContext()).getScreenHeight();
+//            int width = Display.getInstance(getContext()).getScreenWidth();
+//
+//            int heightMeasureSpec = MeasureSpec.makeMeasureSpec(height,MeasureSpec.AT_MOST);
+//            int widthMeasureSpec = MeasureSpec.makeMeasureSpec(width,MeasureSpec.AT_MOST);
+//            mLeftView.measure(widthMeasureSpec,heightMeasureSpec);
+//
+//            System.out.println("?liangyi=> mLeftView size2 is " + mLeftView.getMeasuredWidth());
+
+            mLeftView.addOnLayoutChangeListener(new OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    makeAnimator(v.getMeasuredWidth());
+                    System.out.println("?liangyi=>" + v.getMeasuredWidth());
+                    v.removeOnLayoutChangeListener(this);
+                }
+            });
+
+            mLeftView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    System.out.println("?=>liangyi mLeftView onclick !!" +  v.getLeft() + v.getTop() + v.getRight() + v.getBottom());
+
+
+                }
+            });
+        }else{
+            mFakeLeftContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideLeftContainer(){
+        mAnimatorSetHide.start();
+    }
+
+    @Override
+    protected void onVisibilityChanged(View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+        if(visibility == View.VISIBLE && changedView == mFakeLeftContainer){
+            mAnimatorSetShow.start();
+        }
+
+    }
+}
