@@ -1,0 +1,6 @@
+
+顶格图标：指元素占满整个画布
+非顶格图标：非顶格单元素图标， 非顶格多元素图标
+实现方法：
+（1）layerlist + item + layerlist + item + shape
+ (2) inset + layerlist + item
